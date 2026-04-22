@@ -2,7 +2,7 @@
 
 //First step ist to specify the folder in which to save the final data.
 //Then the image ist split into its three channels. A dialogue is shown in which user specifies which channel is which structure.
-path = "D:/DataPromotion/Leica/20250324 siPSD siGphn + FingR/data/"
+path = "C:/Users/simon/Desktop/20250324 siPSD siGphn + FingR/data/"
 im = getTitle();
 path = path + im + "/"
 File.makeDirectory(path);
@@ -61,13 +61,17 @@ close();
 //4. Do Threshold and Analyze Particles on one copy of DoG. Save and keep one initial copy (multiply vim) for following steps.
 selectWindow("Result of syn1");
 run("Duplicate...", "title=[multiply vim] duplicate");
+selectWindow("Result of syn1");
 saveAs("Tiff", path + im +" normal.tif");
-//run("Auto Threshold", "method=Otsu white show stack");
+run("Auto Threshold", "method=Otsu white show stack");
+saveAs("Results", path + im +" normal otsu results.csv");
+run("Clear Results");
 setThreshold(4, 255, "raw");
 run("Analyze Particles...", "summarize stack");
 saveAs("Results", path + im +" normal results.csv");
 run("Clear Results");
 saveAs("Tiff", path + im +" normal results.tif");
+close();
 
 //5. Vimentin Image: Subtract Background, copy, and enhance contrast in one copy (vim enhanced).
 selectWindow("vim");
