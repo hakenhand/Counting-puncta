@@ -52,7 +52,6 @@ selectWindow("syn2");
 run("Gaussian Blur...","sigma=2.5 stack");
 imageCalculator("subtract stack create", "syn1", "syn2");
 print("Done DoG calculation!");
-
 selectWindow("syn1");
 close();
 selectWindow("syn2");
@@ -60,7 +59,7 @@ close();
 
 //4. Do Threshold and Analyze Particles on one copy of DoG. Save and keep one initial copy (multiply vim) for following steps.
 selectWindow("Result of syn1");
-run("Duplicate...", "title=[multiply vim] duplicate");
+run("Duplicate...", "title=[mask vim] duplicate");
 selectWindow("Result of syn1");
 saveAs("Tiff", path + im +" normal.tif");
 run("Auto Threshold", "method=Otsu white show stack");
@@ -79,26 +78,28 @@ run("Subtract Background...", "rolling=50 stack");
 run("Median...", "radius=2");
 run("Duplicate...", "title=[vim enhanced] duplicate");
 run("Enhance Contrast...", "saturated=0.35 process_all");
+selectWindow("vim");
+run("Auto Threshold", "method=Otsu white show stack");
+run("Invert");
 
-//6. Multiply "multiply vim" with vim in order to only keep the synaptoids which are close to vimentin, i.e. inside the cell -> mult vim
+//6. Subtract "vim"/mask from "mask vim" in order to only keep the synaptoids which are close to vimentin, i.e. inside the cell
 //A copy of the final image is saved.
-imageCalculator("multiply stack create 32-bit", "multiply vim", "vim");
-run("16-bit");
-selectWindow("Result of multiply vim");
-saveAs("Tiff", path + im +" mult vim.tif");
+imageCalculator("subtract stack create", "mask vim", "vim");
+selectWindow("Result of mask vim");
+saveAs("Tiff", path + im +" mask vim.tif");
 
-//7. Run Auto Threshold Otsu on mult vim, analyze particles and save results.
+//7. Run Auto Threshold Otsu on mask vim, analyze particles and save results.
 run("Auto Threshold", "method=Otsu white show stack");
 run("Analyze Particles...", "summarize stack");
-saveAs("Results", path + im +" mult vim results.csv");
+saveAs("Results", path + im +" mask vim results.csv");
 run("Clear Results");
-saveAs("Tiff", path + im +" mult vim results.tif");
+saveAs("Tiff", path + im +" mask vim results.tif");
 close();
 
 //8. Do steps 6 and 7 but with "vim enhanced" instead of vim. A copy of the image after step 6 is saved
-imageCalculator("multiply stack create 32-bit", "multiply vim", "vim enhanced");
+imageCalculator("multiply stack create 32-bit", "mask vim", "vim enhanced");
 run("16-bit");
-selectWindow("Result of multiply vim");
+selectWindow("Result of mask vim");
 saveAs("Tiff", path + im +" mult vim enh.tif");
 run("Auto Threshold", "method=Otsu white show stack");
 run("Analyze Particles...", "summarize stack");
@@ -114,7 +115,7 @@ selectWindow("nuc");
 close();
 selectWindow("vim");
 close();
-selectWindow("multiply vim");
+selectWindow("mask vim");
 close();
 selectWindow("SUM_nuc");
 close();
