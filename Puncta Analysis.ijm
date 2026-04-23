@@ -79,7 +79,7 @@ run("Median...", "radius=2");
 run("Duplicate...", "title=[vim enhanced] duplicate");
 run("Enhance Contrast...", "saturated=0.35 process_all");
 selectWindow("vim");
-run("Auto Threshold", "method=Otsu white show stack");
+run("Auto Threshold", "method=Huang white show stack");
 run("Invert");
 
 //6. Subtract "vim"/mask from "mask vim" in order to only keep the synaptoids which are close to vimentin, i.e. inside the cell
@@ -109,6 +109,9 @@ saveAs("Tiff", path + im +" mult vim enh results.tif");
 close();
 
 //Close all images, which are no longer needed.
+selectWindow("Log");
+saveAs("Text", path + im + " threshold log.txt");
+
 selectWindow("syn");
 close();
 selectWindow("nuc");
