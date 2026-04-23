@@ -35,7 +35,6 @@ run("Median...", "radius=2");
 selectWindow("vim");
 run("Auto Threshold", "method=Huang white show stack");
 run("Set Measurements...", "area redirect=None decimal=3");
-run("Measure");
 run("Analyze Particles...", "  show=Nothing summarize stack");
 selectWindow("Summary of vim");
 saveAs("Results", path + im + "vimentin mask area.csv");
