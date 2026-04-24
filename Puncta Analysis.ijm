@@ -63,6 +63,7 @@ run("Duplicate...", "title=[mask vim] duplicate");
 selectWindow("Result of syn1");
 saveAs("Tiff", path + im +" normal.tif");
 run("Auto Threshold", "method=Otsu white show stack");
+run("Analyze Particles...", "summarize stack");
 saveAs("Results", path + im +" normal otsu results.csv");
 run("Clear Results");
 setThreshold(4, 255, "raw");
